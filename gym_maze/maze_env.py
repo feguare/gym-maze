@@ -89,6 +89,23 @@ class MazeEnv(gym.Env):
 
         return self.state, reward, done, info
 
+    def hop(self, x : int, y :int):
+        
+        self.maze_view.move_robot(x, y)
+
+        if np.array_equal(self.maze_view.robot, self.maze_view.goal):
+            reward = 1
+            done = True
+        else:
+            reward = -0.1/(self.maze_size[0]*self.maze_size[1])
+            done = False
+
+        self.state = self.maze_view.robot
+
+        info = {}
+
+        return self.state, reward, done, info
+
     def reset(self):
         self.maze_view.reset_robot()
         self.state = np.zeros(2)
