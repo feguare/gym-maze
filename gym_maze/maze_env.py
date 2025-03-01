@@ -26,7 +26,8 @@ class MazeEnv(gym.Env):
         elif maze_size:
             if mode == "plus":
                 has_loops = True
-                num_portals = int(round(min(maze_size)/3))
+                # num_portals = int(round(min(maze_size)/3))
+                num_portals = 0
             else:
                 has_loops = False
                 num_portals = 0
@@ -77,34 +78,21 @@ class MazeEnv(gym.Env):
             self.maze_view.move_robot(action)
 
         if np.array_equal(self.maze_view.robot, self.maze_view.goal):
-            reward = 1
             done = True
         else:
-            reward = -0.1/(self.maze_size[0]*self.maze_size[1])
             done = False
 
-        self.state = self.maze_view.robot
-
-        info = {}
-
-        return self.state, reward, done, info
+        return done
 
     def hop(self, x : int, y :int):
-        
-        self.maze_view.move_robot(x, y)
+        self.maze_view.move_robot_to(x, y)
 
         if np.array_equal(self.maze_view.robot, self.maze_view.goal):
-            reward = 1
             done = True
         else:
-            reward = -0.1/(self.maze_size[0]*self.maze_size[1])
             done = False
 
-        self.state = self.maze_view.robot
-
-        info = {}
-
-        return self.state, reward, done, info
+        return done
 
     def reset(self):
         self.maze_view.reset_robot()
